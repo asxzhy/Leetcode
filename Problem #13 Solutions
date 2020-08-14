@@ -1,0 +1,71 @@
+Code: Java
+class Solution {
+    public int romanToInt(String s) {
+        Map tran = new HashMap<Character, Integer>();
+        tran.put('I', 1);
+        tran.put('V', 5);
+        tran.put('X', 10);
+        tran.put('L', 50);
+        tran.put('C', 100);
+        tran.put('D', 500);
+        tran.put('M', 1000);
+        
+        int[] nums = new int[18];
+        int returnVal = 0;
+        
+        for (int i = 0; i < s.length(); i++) {
+            nums[i] = (int)tran.get(s.charAt(i));
+            
+            if (i == 0) {returnVal += nums[0];}
+            
+            if (i > 0) {
+                if (nums[i - 1] >= nums[i]) {
+                    returnVal += nums[i];
+                }
+                if (nums[i - 1] < nums[i]) {
+                    returnVal += nums[i] - 2*nums[i - 1];
+                }
+            }
+        }
+        
+        
+        return returnVal;
+    }
+}
+
+
+
+====================================================================================================
+
+
+
+Code: Java
+class Solution {
+    public int romanToInt(String s) {
+        if (s.length() == 0 || s == null) {
+            return -1;
+        }
+        
+        Map tran = new HashMap<Character, Integer>();
+        tran.put('I', 1);
+        tran.put('V', 5);
+        tran.put('X', 10);
+        tran.put('L', 50);
+        tran.put('C', 100);
+        tran.put('D', 500);
+        tran.put('M', 1000);
+        
+        int returnVal = (int)tran.get(s.charAt(0));
+        
+        for (int i = 1; i < s.length(); i++) {
+            if ((int)tran.get(s.charAt(i - 1)) >= (int)tran.get(s.charAt(i))) {
+                returnVal += (int)tran.get(s.charAt(i));
+            }else {
+                returnVal += (int)tran.get(s.charAt(i)) - 2*(int)tran.get(s.charAt(i - 1));
+            }
+        }
+        
+        
+        return returnVal;
+    }
+}
