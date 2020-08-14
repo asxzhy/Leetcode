@@ -1,0 +1,121 @@
+434. Number of Segments in a String
+
+Count the number of segments in a string, where a segment is defined to be a contiguous sequence of non-space characters.
+
+Please note that the string does not contain any non-printable characters.
+
+Example:
+
+Input: "Hello, my name is John"
+Output: 5
+
+
+
+====================================================================================================
+
+
+Thought: using split() method, we can split one sentence down and get the number of segments.
+Code: Python
+class Solution:
+    def countSegments(self, s: str) -> int:
+        return len(s.split())
+
+
+
+====================================================================================================
+
+
+
+Thought: loop through the input, distinguish the segments by looking for blank spaces. In order to avoid the problem of wrong format such as two blank spaces between
+words and having a blank spaces at the end of the input, I added a boolean variable word_before which is used to determine if the index before the blank space is
+not another blank space. This allows me to avoid counting two number when there is two blank spaces between words. I also checked if the last element in the input is a space.
+Only if the last element is not a space, we need to count one more to include the last word.
+Code: Java
+class Solution:
+    def countSegments(self, s: str) -> int:
+        word_before = False  # used to determine if there is word before the blank space
+        count = 0  # used to count how many segments the variable s has
+        
+        for i in s:
+            # if there is a blank space at the current index and a word before the space, we add count by one
+            if i == " " and word_before:
+                count += 1
+                word_before = False
+            
+            # reset the word_before to True when we pass the blank space
+            if i != " " and not word_before:
+                word_before = True
+        
+        # if the input is not empty and the last element in the input is not a space, we add count by one in order to count on the last word
+        if len(s) > 0 and s[-1] != " ":
+            count += 1
+        return count
+
+
+
+====================================================================================================
+
+
+
+Thought: After reviewing other people's solution, I found out a thought that does not need to think about the incorrect format that I did for the previous submission.
+Loop through the input, loop for the element that is just after the blank space which is looking for the first element of every segments. However this method is slower than
+the second solution I had for some reason.
+Code: python
+class Solution:
+    def countSegments(self, s: str) -> int:
+        prev = " "  # store the previous element in the input
+        count = 0  # used to count the number of segments
+        
+        for i in s:
+            # if the previous element is a space and the current one is not, add count by one
+            if i != " " and prev == " ":
+                count += 1
+            prev = i  # assign the current element to be the previous element at the end of the for loop
+        
+        return count
+
+
+
+====================================================================================================
+
+
+
+Thought: After getting rid of the variable, prev, this solution's runtime and memory usage is still the same as the solution three.
+Code: Python
+class Solution:
+    def countSegments(self, s: str) -> int:
+        count = 0  # used to count the number of segments
+        
+        for i in range(0, len(s)):
+            # if the previous element is a space and the current one is not, add count by one
+            if s[i] != " " and (i == 0 or s[i-1] == " "):
+                count += 1
+        
+        return count
+
+
+
+====================================================================================================
+
+
+
+Thought: delete all the extra spaces and the use the count method to find how many blank spaces there are to find out how many segments the input has
+COde:python   
+class Solution:
+    def countSegments(self, s: str) -> int:
+        s = list(s)
+        indexes = []  # used to store the extra spaces that needs to be removed
+        count = 0  # used to keep track of the length of the s
+        
+        for i in range(0, len(s)):
+            # if there are two spaces in a row, append in indexes and latter remove the extra space
+            if s[i] == " " and (i == 0 or s[i-1] == " "):
+                indexes.append(i)
+        
+        for i in indexes:
+            s.pop(i + count)
+            count -= 1
+        
+        if len(s) > 0 and s[-1] != " ":
+            return s.count(" ") + 1
+        return s.count(" ")
