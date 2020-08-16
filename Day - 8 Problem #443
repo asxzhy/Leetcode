@@ -1,0 +1,118 @@
+443. String Compression
+
+Given an array of characters, compress it in-place.
+
+The length after compression must always be smaller than or equal to the original array.
+
+Every element of the array should be a character (not int) of length 1.
+
+After you are done modifying the input array in-place, return the new length of the array.
+
+ 
+Follow up:
+Could you solve it using only O(1) extra space?
+
+ 
+Example 1:
+
+Input:
+["a","a","b","b","c","c","c"]
+
+Output:
+Return 6, and the first 6 characters of the input array should be: ["a","2","b","2","c","3"]
+
+Explanation:
+"aa" is replaced by "a2". "bb" is replaced by "b2". "ccc" is replaced by "c3".
+ 
+
+Example 2:
+
+Input:
+["a"]
+
+Output:
+Return 1, and the first 1 characters of the input array should be: ["a"]
+
+Explanation:
+Nothing is replaced.
+ 
+
+Example 3:
+
+Input:
+["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+
+Output:
+Return 4, and the first 4 characters of the input array should be: ["a","b","1","2"].
+
+Explanation:
+Since the character "a" does not repeat, it is not compressed. "bbbbbbbbbbbb" is replaced by "b12".
+Notice each digit has it's own entry in the array.
+ 
+
+Note:
+
+All characters have an ASCII value in [35, 126].
+1 <= len(chars) <= 1000.
+
+
+
+====================================================================================================
+
+
+
+Thought: Loop through the list, record the last character before a new character to calculate the total amount of a character. Use a count to keep track of which index we need
+to put the character and its length in.
+Code: Python
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        index_prev = -1  # store the previous character's index
+        count = -1  # count the number of elements that are changed
+        
+        for i in range(0, len(chars)):
+            if i == len(chars) - 1 or chars[i] != chars[i+1]:  # if the character will change at the next index or it is the last element in the list
+                if index_prev + 1 == i:  # check if the character is by itself
+                    count += 1
+                    chars[count] = chars[i]  # replace the element at the front of the list to be this character
+                else:  # if the character is not by itself, then we need to add its total amount
+                    count += 2
+                    chars[count-1] = chars[i]
+                    if i - index_prev > 9:  # if the total amount if greater than 9 smaller than 100, we need two spaves for it
+                        count += 1
+                        chars[count-1] = str((i - index_prev)//10)
+                        chars[count] = str((i - index_prev)%10)
+                    else:
+                        chars[count] = str(i - index_prev)
+                        
+                index_prev = i
+        
+        return count + 1
+
+
+
+====================================================================================================
+
+
+
+Thought: use two while loop, outer loop is used to set variables when encounters a new character, inner loop is used to count how many common characters there are. Then add
+the character and its number to the front of the list
+Code:Python
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        index = 0  # keep track of the index
+        count = 0  # keep track of the index that is being replaced
+        
+        while index < len(chars):
+            char = chars[index]  # store the first character
+            freq = 0  # reset the frequency to zero
+            while index < len(chars) and char == chars[index]:  # if the character is still same as the stored first character, then add frequency by one and go to the next index
+                index += 1
+                freq += 1
+            chars[count] = char  # replace element at the front to be the character that has been checked
+            count += 1
+            if freq > 1:  # if the amount of character is greater than one, then add the amount behind the character
+                for i in str(freq):  # if the number is greater than 9, we need two or more spaces to add the number
+                    chars[count] = i
+                    count += 1
+        
+        return count
