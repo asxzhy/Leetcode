@@ -1,0 +1,57 @@
+459. Repeated Substring Pattern
+
+Given a non-empty string check if it can be constructed by taking a substring of it and appending multiple copies of the substring together. You may assume the given string consists of lowercase English letters only and its length will not exceed 10000.
+
+ 
+
+Example 1:
+
+Input: "abab"
+Output: True
+Explanation: It's the substring "ab" twice.
+Example 2:
+
+Input: "aba"
+Output: False
+Example 3:
+
+Input: "abcabcabcabc"
+Output: True
+Explanation: It's the substring "abc" four times. (And the substring "abcabc" twice.)
+
+
+
+====================================================================================================
+
+
+
+Thought: loop through the string from the front and back at the same time. Search for the same substring at the front and back. If the substring is found, check to see if it can
+be multiplied to get to the exact length of the input string, and finally check to see if the substring is same as the input string when it is multiplied by an integer.
+Code: Python
+class Solution:
+    def repeatedSubstringPattern(self, s: str) -> bool:
+        l = 1  # left pointer
+        r = len(s) - 1  # right pointer
+        
+        while l <= r:
+            # check when the front and back strings are same, see if the substring can be multiplied by an integer to be the length of the entire s stirng, and then check if the strings are the same when the substring is multiplied by that integer
+            if s[:l] == s[r:] and len(s) % len(s[:l]) == 0 and s[:l] * (len(s)//len(s[:l])) == s:
+                return True
+            l += 1
+            r -= 1
+        return False
+
+
+
+====================================================================================================
+
+
+
+Thought: from discussion in leetcode. we add two input string together, but remove its first and last element. Then find the input string in this new sting, if we can find
+the string that means there are repeated substrings in the input string.
+Code:Python
+class Solution:
+    def repeatedSubstringPattern(self, s: str) -> bool:
+        ss = (s+s)[1:-1]
+        
+        return ss.find(s) != -1
