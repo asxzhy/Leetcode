@@ -34,7 +34,8 @@ class Solution:
         r = len(s) - 1  # right pointer
         
         while l <= r:
-            # check when the front and back strings are same, see if the substring can be multiplied by an integer to be the length of the entire s stirng, and then check if the strings are the same when the substring is multiplied by that integer
+            # check when the front and back strings are same, see if the substring can be multiplied by an integer to be the length of the entire s stirng, 
+            # and then check if the strings are the same when the substring is multiplied by that integer
             if s[:l] == s[r:] and len(s) % len(s[:l]) == 0 and s[:l] * (len(s)//len(s[:l])) == s:
                 return True
             l += 1
