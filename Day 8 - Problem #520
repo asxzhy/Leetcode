@@ -1,0 +1,77 @@
+520. Detect Capital
+
+Given a word, you need to judge whether the usage of capitals in it is right or not.
+
+We define the usage of capitals in a word to be right when one of the following cases holds:
+
+All letters in this word are capitals, like "USA".
+All letters in this word are not capitals, like "leetcode".
+Only the first letter in this word is capital, like "Google".
+Otherwise, we define that this word doesn't use capitals in a right way.
+ 
+
+Example 1:
+
+Input: "USA"
+Output: True
+ 
+
+Example 2:
+
+Input: "FlaG"
+Output: False
+ 
+
+Note: The input will be a non-empty word consisting of uppercase and lowercase latin letters.
+
+
+
+====================================================================================================
+
+
+
+Thougt: There are three possibilities. One is all lower cases, second one is first letter is upper case and the rests are lower cases, and the last one is all upper cases.
+Therefore, we could check if the first letter's case. If the first letter is upper case, check for case changes after the second letter. If the first letter is lower cases,
+all the rests have to be lower cases.
+Code:Python
+class Solution:
+    def detectCapitalUse(self, word: str) -> bool:
+        for i in range(1, len(word)):
+            if word[0].isupper():
+                if word[1].isupper() != word[i].isupper():  # check if the case changes after the first letter
+                    return False
+            else:
+                if word[i].isupper():  # check if the case is upper if the first letter is upper case
+                    return False
+        return True
+
+
+
+====================================================================================================
+
+
+
+Thought: same as the previous solution
+Code: python
+class Solution:
+    def detectCapitalUse(self, word: str) -> bool:
+        a = True
+        for i in range(1, len(word)):
+            if word[i].isupper():
+                a = False
+        
+        return word.isupper() or word.islower() or a
+
+
+
+====================================================================================================
+
+
+
+Thought: When the letters after the first letter are all lower case, it doesn't matter what case is for the first letter. We need to add a possibility for only one letter in the
+input string since we are not checking the first letter when the word is not all capital
+Code: Python
+class Solution:
+    def detectCapitalUse(self, word: str) -> bool:
+        
+        return word.isupper() or word[1:].islower() or len(word) < 2
