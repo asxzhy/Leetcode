@@ -1,0 +1,54 @@
+557. Reverse Words in a String III
+
+Given a string, you need to reverse the order of characters in each word within a sentence while still preserving whitespace and initial word order.
+
+Example 1:
+Input: "Let's take LeetCode contest"
+Output: "s'teL ekat edoCteeL tsetnoc"
+Note: In the string, each word is separated by single space and there will not be any extra space in the string.
+
+
+
+====================================================================================================
+
+
+
+Thought: uses a recursive function. Base case is when there is no whitespace in the string. If there is whitespace, remove the first whitespace and all the method again.
+Code: Python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        if not " " in s[:]:  # if there is no whitespace in the string, reverse the word and return it
+            return s[::-1]
+        i = s.index(" ")  # find where the whitespace is at
+        
+        return s[:i][::-1] + " " + self.reverseWords(s[i+1:])
+
+
+
+====================================================================================================
+
+
+
+Thought: turn the stirng into a list. This list only contains words from the input string. Reverse all the words in the list, and then merge the list back together with a
+whitespace between every word.
+Code: Python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        s = s.split()  # split the string by a whitespace into a list
+        
+        for i in range(0, len(s)):  # reverse every word in the list
+            s[i] = s[i][::-1]
+    
+        return " ".join(s)  # merge the list together with a whitespace in between
+
+
+
+====================================================================================================
+
+
+
+Thought: From discussion in leetcode. reverse the word order first. For example, "I am a student" to "student a am I", and then reverse the entire string to "I ma a tneduts"
+Code: Python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        return " ".join(s.split()[::-1])[::-1]
