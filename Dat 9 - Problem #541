@@ -1,0 +1,72 @@
+541. Reverse String II
+
+Given a string and an integer k, you need to reverse the first k characters for every 2k characters counting from the start of the string. If there are less than k characters left, reverse all of them. If there are less than 2k but greater than or equal to k characters, then reverse the first k characters and left the other as original.
+Example:
+Input: s = "abcdefg", k = 2
+Output: "bacdfeg"
+Restrictions:
+The string consists of lower English letters only.
+Length of the given string and k will in the range [1, 10000]
+
+
+
+====================================================================================================
+
+
+
+Thought: By using two while loop to accomplish the problem, the outer while loop is used to loop through the string, the inner while loop is used to count for the 2k characters
+when we find all the 2k characters, we reverse the second half of the 2k characters.
+Code: Python
+class Solution:
+    def reverseStr(self, s: str, k: int) -> str:
+        if len(s) < k:  # if the length of the input string is less than the integer k, reverse the input string
+            re = s[::-1]
+        else:  # else just reverse the first k characters
+            re = s[k-1::-1]
+        i = k
+        length = 0
+        
+        while i < len(s):  # the loop starts after the kth character
+            while length < 2*k and i < len(s):  # check if there is enough characters
+                if length < k:  # add the first k characters in the re string
+                    re += s[i]
+                length += 1
+                i += 1
+            
+            if length < 2*k:  # if there is not enough characters, add the reversed characters after the first k characters
+                re += s[i-length+k:][::-1]
+            else:  # if there is enough character, add teh reversed characters.
+                re += s[i-k:i][::-1]
+            length = 0
+            
+        return re
+
+
+
+====================================================================================================
+
+
+
+Thought: using recursive, devide the question into various 2k characters problems
+Code: Python
+class Solution:
+    def reverseStr(self, s: str, k: int) -> str:
+        if not s: return ""
+        
+        return s[:k][::-1] + s[k:2*k] + self.reverseStr(s[2*k:], k)
+
+
+
+====================================================================================================
+
+
+
+Thought: same thought process as solution two but uses for loop instead
+Code: Python
+class Solution:
+    def reverseStr(self, s: str, k: int) -> str:
+        s = list(s)
+        for i in range(0, len(s), 2*k):
+            s[i:i+k] = s[i:i+k][::-1]
+        
+        return "".join(s)
