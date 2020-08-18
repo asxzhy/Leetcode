@@ -1,0 +1,88 @@
+680. Valid Palindrome II
+
+Given a non-empty string s, you may delete at most one character. Judge whether you can make it a palindrome.
+
+Example 1:
+Input: "aba"
+Output: True
+Example 2:
+Input: "abca"
+Output: True
+Explanation: You could delete the character 'c'.
+Note:
+The string will only contain lowercase characters a-z. The maximum length of the string is 50000.
+
+
+
+====================================================================================================
+
+
+
+Thought: First check if the input string is already a palidrome. Check if the character starts from the left and right of the list are the same one by one. If the characters are
+not the same, try to delete one of the character and then compare to see if the string is palidrome. If the string is still not a palidrome then return false
+Code: Python
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        # check if it's a palindrome 
+        if s[:len(s)//2][::-1] == s[len(s)//2+len(s)%2:]: return True
+        
+        s = list(s)  # conver the string to a list
+        temp = s[:]  # make a copy of the list
+        l = 0  # left pointer
+        r = len(s) - 1  # right pointer
+        while l < r:
+            if s[l] != s[r]:  # if the two letters are not same
+                # try to delete one of them and then compare if the string is a palindrome
+                del temp[l]
+                if temp[:len(temp)//2][::-1] == temp[len(temp)//2+len(temp)%2:]: return True
+                # try to delete the other one
+                temp = s[:]
+                del temp[r]
+                if temp[:len(temp)//2][::-1] == temp[len(temp)//2+len(temp)%2:]: return True
+                
+                return False  # if the string is still not the same, return false
+            l += 1
+            r -= 1
+
+
+
+====================================================================================================
+
+
+
+Thought: Same thought process but gets rid of the characters that have been checked. Only compare the characters that are left (ignore the characters that have been checked to 
+be same).
+Code: Python
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        i = 0
+        
+        while i < len(s)//2 and s[i] == s[-(i+1)]:
+                i += 1
+        
+        s = s[i:len(s)-i]
+        
+        return s[1:][::-1] == s[1:] or s[:-1][::-1] == s[:-1]
+
+
+
+====================================================================================================
+
+
+
+Thought: Tried to do it in recursion but it is very slow compare to solution one and two. Thought from leetcode discussion
+Code: Python
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        return self.is_palidrome(0, len(s) - 1, s, True)
+    
+    def is_palidrome(self, l, r, s, skip):
+        if l >= r: return True  # stop when l is greater or equal to r
+        
+        if s[l] == s[r]:  # if left character is equal to right character, go to the next characters
+            return True and self.is_palidrome(l + 1, r - 1, s, skip)
+        elif not skip:  # if the characters are not the same, and we have already skipped a character, return false
+            return False
+        else:  # if te characters are not the same, but we haven't skipped a character, try to skip the left character or the right character
+            return self.is_palidrome(l + 1, r, s, False) or self.is_palidrome(l, r - 1, s, False)
+        
