@@ -1,0 +1,109 @@
+709. To Lower Case
+
+Implement function ToLowerCase() that has a string parameter str, and returns the same string in lowercase.
+
+ 
+
+Example 1:
+
+Input: "Hello"
+Output: "hello"
+Example 2:
+
+Input: "here"
+Output: "here"
+Example 3:
+
+Input: "LOVELY"
+Output: "lovely"
+
+
+
+====================================================================================================
+
+
+
+Thought: Just wanna see how fast it is. (About 10ms slower than all the submissions below. Same memory usage)
+Code: Python
+class Solution:
+    def toLowerCase(self, str: str) -> str:
+        str = str.lower()
+        
+        return str
+
+
+
+====================================================================================================
+
+
+
+Thought: Tried to not use any lower(), upper(), islower(), and isupper(). Created two list which stores the upper cases and lower cases. If the letter is upper case, switch it 
+to corresponding lower case.
+Code: Python
+class Solution:
+    def toLowerCase(self, str: str) -> str:
+        # lists of upper and lower case alphabet
+        alph_u = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+        alph_l = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+        s = list(str)
+        
+        for i in range(0, len(s)):
+            if s[i] in alph_u:  # if the letter is upper case, replace it with the lower case letter
+                s[i] = alph_l[alph_u.index(s[i])]
+
+        return "".join(s)
+
+
+
+====================================================================================================
+
+
+
+Thought: Tried to use lower() and isupper() instead of two lists. Wanna see the difference in speed (negligible)
+Code: Python
+class Solution:
+    def toLowerCase(self, str: str) -> str:
+        s = list(str)
+        for i in range(0, len(s)):
+            if s[i].isupper():
+                s[i] = s[i].lower()
+                
+        return "".join(s)
+
+
+
+====================================================================================================
+
+
+
+Thought: Tried to use a string to store the result instead of convert the input string to a list. Wanna see the difference (still negligible)
+Code: Python
+class Solution:
+    def toLowerCase(self, str: str) -> str:
+        result = ""
+        for i in range(0, len(str)):
+            if str[i].isupper():
+                result += str[i].lower()
+            else:
+                result += str[i]
+                
+        return result
+
+
+
+====================================================================================================
+
+
+
+Thought: Reviewed other people's code from discussion section. Learnt the function of ord and chr. Tried to use them instead of the two list in solution two.
+Code: Python
+class Solution:
+    def toLowerCase(self, str: str) -> str:
+        result = ""
+        for i in range(0, len(str)):
+            if ord("A") <= ord(str[i]) <= ord("Z"):
+                result += chr(ord(str[i]) + 32)
+            else:
+                result += str[i]
+            
+        return result
