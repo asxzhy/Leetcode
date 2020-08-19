@@ -1,0 +1,93 @@
+686. Repeated String Match
+
+Given two strings A and B, find the minimum number of times A has to be repeated such that B is a substring of it. If no such solution, return -1.
+
+For example, with A = "abcd" and B = "cdabcdab".
+
+Return 3, because by repeating A three times (“abcdabcdabcd”), B is a substring of it; and B is not a substring of A repeated two times ("abcdabcd").
+
+Note:
+The length of A and B will be between 1 and 10000.
+
+
+
+====================================================================================================
+
+
+
+Thought: First check if both A and B strings are empty or if A is empty. Return the result. Find how many times A has to repeated it self to be the same length as B or a little
+longer than B and then add two to that number. We add two because A might be something like "abc" and B might be "cabca", which means we need to repeat A two more times to 
+make sure we have covered all the possibilities.
+Code: Python
+class Solution:
+    def repeatedStringMatch(self, A: str, B: str) -> int:
+        if len(A) == len(B) == 0: return 1  # if both strings are empty, return 1
+        if len(A) == 0: return -1  # if A is empty, return -1
+        times = len(B) // len(A) + 2  # check how many longer is B compare to A
+        count = 0  # count the number of repeating times
+        A_temp = A  # used to store repeated string A
+
+        for i in range(1, times + 1):  # used to check if B is a substring of repeated A
+            if B in A_temp: return i
+            A_temp += A
+
+        return -1
+
+
+
+====================================================================================================
+
+
+
+Thought: tried to do the same method by using recursion
+Code: Python
+class Solution:
+    def repeatedStringMatch(self, A: str, B: str) -> int:
+        times = len(B)//len(A)+2
+        return self.match(A, B, 1, times)
+    
+    
+    def match(self, a, b, count, times):
+        if b in a*count:
+            return count
+        if count >= times: return -1
+        count += 1
+        
+        return self.match(a, b, count, times)
+
+
+
+====================================================================================================
+
+
+
+Thought: Same method as solution one but we starts from A is alreay longer to equal to the length of B
+Code: Python
+class Solution:
+    def repeatedStringMatch(self, A: str, B: str) -> int:
+        times = -(-len(B)//len(A))  # get the number of times we need to multiply A to get A to the same length or longer than B
+        
+        for i in range(2):  # check if B is in A if A is repeated two more times
+            if B in A * (times + i):
+                return times + i
+        
+        return -1
+
+
+
+====================================================================================================
+
+
+
+Thought: Same method but avoid some addition
+Code: Python
+class Solution:
+    def repeatedStringMatch(self, A: str, B: str) -> int:
+        times = -(-len(B)//len(A))  # get the number of times we need to multiply A to get A to the same length or longer than B
+        
+        for i in range(times, times + 2):  # check if B is in A if A is repeated two more times
+            if B in A * (i):
+                return i
+        
+        return -1
+        
