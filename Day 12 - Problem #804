@@ -1,0 +1,143 @@
+804. Unique Morse Code Words
+
+International Morse Code defines a standard encoding where each letter is mapped to a series of dots and dashes, as follows: "a" maps to ".-", "b" maps to "-...", "c" maps to "-.-.", and so on.
+
+For convenience, the full table for the 26 letters of the English alphabet is given below:
+
+[".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+Now, given a list of words, each word can be written as a concatenation of the Morse code of each letter. For example, "cab" can be written as "-.-..--...", (which is the concatenation "-.-." + ".-" + "-..."). We'll call such a concatenation, the transformation of a word.
+
+Return the number of different transformations among all words we have.
+
+Example:
+Input: words = ["gin", "zen", "gig", "msg"]
+Output: 2
+Explanation: 
+The transformation of each word is:
+"gin" -> "--...-."
+"zen" -> "--...-."
+"gig" -> "--...--."
+"msg" -> "--...--."
+
+There are 2 different transformations, "--...-." and "--...--.".
+Note:
+
+The length of words will be at most 100.
+Each words[i] will have length in range [1, 12].
+words[i] will only consist of lowercase letters.
+
+
+
+====================================================================================================
+
+
+
+Thought: Use a list to store all the different transformations. Only new transformations can be added to the list. For every word in the input list, turn them into morse code
+by using the provided morse code list. Return the transformations list's length at the end.
+Code: Python
+class Solution:
+    def uniqueMorseRepresentations(self, words: List[str]) -> int:
+        codes = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+        transformations = []  # used to store different transformations
+        trans = ""  # used to store the current word's transformation
+        
+        for i in range(0, len(words)):
+            # for every word, get their morse code
+            for letter in words[i]:
+                trans += codes[ord(letter) - 97]
+                
+            # check if the morse code is same as other corse code's transformation
+            if not trans in transformations:
+                transformations.append(trans)
+            trans = ""  # reset to empty for next word
+        
+        return len(transformations)
+
+
+
+====================================================================================================
+
+
+
+Thought: Change list to set because I used an if statement to check if a transformation string is in the transformations list. Then I tried to convert the conversion of the word
+into a one line code, thought that might be faster. Turns out the run time doesn't improve
+Code: Python
+class Solution:
+    def uniqueMorseRepresentations(self, words: List[str]) -> int:
+        codes = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+        transformations = set()  # used to store different transformations
+        trans = ""  # used to store the current word's transformation
+        
+        for i in range(0, len(words)):
+            # for every word, get their morse code
+            trans = "".join([codes[ord(letter) - 97] for letter in words[i]])
+                
+            # check if the morse code is same as other corse code's transformation
+            if not trans in transformations:
+                transformations.add(trans)
+            trans = ""  # reset to empty for next word
+        
+        return len(transformations)
+
+
+
+====================================================================================================
+
+
+
+Thought: I kept the set but got rid of the one line code which converts the word into morse code. Run time decreases.
+Code: Python
+class Solution:
+    def uniqueMorseRepresentations(self, words: List[str]) -> int:
+        codes = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+        transformations = set()  # used to store different transformations
+        trans = ""  # used to store the current word's transformation
+        
+        for i in range(0, len(words)):
+            # for every word, get their morse code
+            for letter in words[i]:
+                trans += codes[ord(letter) - 97]
+                
+            # check if the morse code is same as other corse code's transformation
+            if not trans in transformations:
+                transformations.add(trans)
+            trans = ""  # reset to empty for next word
+        
+        return len(transformations)
+
+
+
+====================================================================================================
+
+
+
+Thought: Learnt that set does not allow duplicate elements in it. So I got rid of the if statement.
+Code: Python
+class Solution:
+    def uniqueMorseRepresentations(self, words: List[str]) -> int:
+        codes = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+        transformations = set()  # used to store different transformations
+        
+        for i in range(0, len(words)):
+            trans = ""  # used to store the current word's transformation
+            # for every word, get their morse code
+            for letter in words[i]:
+                trans += codes[ord(letter) - 97]
+                
+            transformations.add(trans)
+        
+        return len(transformations)
+
+
+
+====================================================================================================
+
+
+
+Thought: Tried to convert the whole code into one line.
+Code: Python
+class Solution:
+    def uniqueMorseRepresentations(self, words: List[str]) -> int:
+        codes = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+        
+        return len({"".join(codes[ord(letter) - 97] for letter in word) for word in words})
