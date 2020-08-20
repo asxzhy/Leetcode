@@ -1,0 +1,175 @@
+788. Rotated Digits
+
+X is a good number if after rotating each digit individually by 180 degrees, we get a valid number that is different from X.  Each digit must be rotated - we cannot choose to leave it alone.
+
+A number is valid if each digit remains a digit after rotation. 0, 1, and 8 rotate to themselves; 2 and 5 rotate to each other (on this case they are rotated in a different direction, in other words 2 or 5 gets mirrored); 6 and 9 rotate to each other, and the rest of the numbers do not rotate to any other number and become invalid.
+
+Now given a positive number N, how many numbers X from 1 to N are good?
+
+Example:
+Input: 10
+Output: 4
+Explanation: 
+There are four good numbers in the range [1, 10] : 2, 5, 6, 9.
+Note that 1 and 10 are not good numbers, since they remain unchanged after rotating.
+Note:
+
+N  will be in range [1, 10000].
+
+
+
+====================================================================================================
+
+
+
+Thought: Use one list to store the number that can be rotated and another list stores corresponding rotated digits and with same index. Use a for loop to iterate from 1 to the
+input number, and another for loop to convert every digit of that number to the rotated digits. If the number has digits that cannot be rotated, proceed to the next number.
+Check if the rotated number is same as the number before rotating. If so, count one. Return the number of numbers that can be rotated and changes after rotation at the end.
+Code: Python
+class Solution:
+    def rotatedDigits(self, N: int) -> int:
+        # these two lists is used to do number rotation
+        num_before = ["0", "1", "8", "2", "5", "6", "9"]
+        num_after = ["0", "1", "8", "5", "2", "9", "6"]
+        num_rotated = ""  # used to store the number after rotation
+        result = 0  # the output
+        
+        for i in range(1, N + 1):
+            for num in str(i):  # if the number is greater than 9 there are going to be more than two digits we need to rotate
+                if num in num_before:  # add the rotated number to the num_rotated
+                    num_rotated += num_after[num_before.index(num)]
+                else:  # if the digit cannot be rotated, exit and proceed to the next digit
+                    num_rotated = i
+                    break
+            
+            if i != int(num_rotated):  # check if the number after rotation is different from the previous number
+                result += 1
+
+            num_rotated = ""  # reset to empty
+        
+        return result
+
+
+
+====================================================================================================
+
+
+
+Thought: Same method, used a boolean diff to indicate if the digits changes. Previous solution's run time was about 200ms, this one is about 110ms
+Code: Python
+class Solution:
+    def rotatedDigits(self, N: int) -> int:
+        # these two lists is used to do number rotation
+        num_before = ["0", "1", "8", "2", "5", "6", "9"]
+        num_after = ["0", "1", "8", "5", "2", "9", "6"]
+        diff = False  # used to determine if the number after rotatio changes
+        result = 0  # the output
+        
+        for i in range(1, N + 1):
+            for num in str(i):  # if the number is greater than 9 there are going to be more than two digits we need to rotate
+                if num in num_before:
+                    if num_after[num_before.index(num)] != num:
+                        # check if the digit can be rotated, if so check if the number changes after rotation
+                        diff = True
+                else:
+                    # if the digit cannot be rotated, exit and proceed to the next digit
+                    diff = False
+                    break
+            
+            if diff:  # check if the number after rotation is different from the previous number
+                result += 1
+            diff = False # reset difference to false
+        
+        return result
+
+
+
+====================================================================================================
+
+
+
+Thought: Changed one of the list to only contain the number that rotate to themselves. We no longer need to compare two digits. Just find if the digit is in or not in the two lists
+Code: Python
+class Solution:
+    def rotatedDigits(self, N: int) -> int:
+        # these two lists is used to check if a digit can be rotated and determines if the digit does not change
+        rotatable = ["0", "1", "8", "5", "2", "9", "6"]
+        not_changing = ["0", "1", "8"]
+        diff = False  # used to determine if the number after rotatio changes
+        result = 0  # the output
+        
+        for i in range(1, N + 1):
+            for num in str(i):  # if the number is greater than 9 there are going to be more than two digits we need to rotate
+                if num in rotatable:
+                    if not num in not_changing:
+                        # check if the digit can be rotated, if so check if the number changes after rotation
+                        diff = True
+                else:
+                    # if the digit cannot be rotated, exit and proceed to the next digit
+                    diff = False
+                    break
+            
+            if diff:  # check if the number after rotation is different from the previous number
+                result += 1
+            diff = False # reset difference to false
+        
+        return result
+
+
+
+====================================================================================================
+
+
+
+Thought: Learnt that set is faster than list in searching whether or not something is in a set. A little faster than the previous solutions
+Code: Python
+class Solution:
+    def rotatedDigits(self, N: int) -> int:
+        # these two lists is used to check if a digit can be rotated and determines if the digit does not change
+        rotatable = set(["0", "1", "8", "2", "5", "6", "9"])
+        not_changing = set(["0", "1", "8"])
+        diff = False  # used to determine if the number after rotatio changes
+        result = 0  # the output
+        
+        for i in range(1, N + 1):
+            for num in str(i):  # if the number is greater than 9 there are going to be more than two digits we need to rotate
+                if num in rotatable:
+                    if not num in not_changing:
+                        # check if the digit can be rotated, if so check if the number changes after rotation
+                        diff = True
+                else:
+                    # if the digit cannot be rotated, exit and proceed to the next digit
+                    diff = False
+                    break
+            
+            if diff:  # check if the number after rotation is different from the previous number
+                result += 1
+            diff = False # reset difference to false
+        
+        return result
+
+
+
+====================================================================================================
+
+
+
+Thought: Used a different method, the previous methods are searching if the input number's digit is a rotatable number. This method is searching if the rotatable and 
+non-rotatable digits are in the input number. About 30ms faster than the previous solution
+Code: Python
+class Solution:
+    def rotatedDigits(self, N: int) -> int:
+        result = 0  # output
+        
+        for i in range(1, N + 1):
+            num = str(i)
+            
+            if "3" in num or "4" in num or "7" in num:
+                # if these non-rotatable digits are in the number, continue to the next cycle
+                continue
+            if "5" in num or "2" in num or "9" in num or "6" in num:
+                # if these any of these digits is in the number, that means the number changes no matter how many
+                # rotatable digits that doesn't change are in the number
+                result += 1
+        
+        return result
