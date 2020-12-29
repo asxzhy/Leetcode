@@ -17,7 +17,7 @@ class Solution:
         if not root:
             return False
 
-        def find_sum(node, total):
+        def find_sum(node: TreeNode, total: int):
             # if the node is empty, return false. Leaf node's child won't go
             # into this if statement
             if not node:
