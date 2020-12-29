@@ -35,13 +35,3 @@ class Solution:
                     queue.append(node.right)
 
             depth += 1
-
-
-s = Solution()
-a = TreeNode(5)
-b = TreeNode(4)
-c = TreeNode(3)
-d = TreeNode(2, b, a)
-e = TreeNode(1, d, c)
-
-print(s.minDepth(e))
